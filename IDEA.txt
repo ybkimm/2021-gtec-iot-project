@@ -44,5 +44,8 @@ MIC 로 GAME 말해서 실행
 핸드폰으로 라즈베리파이 주요 LCD 부저 팬 컨트롤하기
 /*온도 센서를 이용해 웹페이지에 온도 출력
 
+//DEEP♂DARK♂FANTASY<br />
+//BOY♂NEXT♂DOOR
+
     
 
