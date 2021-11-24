@@ -1,0 +1,22 @@
+{
+  "header": {
+    "logged-in": "{}さんでログインしています。",
+    "not-logged-in": "ログインしていません。",
+    "sign-in": "ログイン",
+    "sign-out": "ログアウト",
+    "new-account": "アカウントを作成"
+  },
+  "form": {
+    "submit": "送信",
+    "cancel": "キャンセル",
+    "select_option": "下記から選んでください",
+    "select_options": "下記から選らんでださい",
+    "n_selected": "{}個を選びました"
+  },
+  "page/login": {
+    "title": "Inaアカウントでログイン",
+    "email": "メール",
+    "password": "パスワード",
+    "submit": "ログイン"
+  }
+}

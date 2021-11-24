@@ -1,0 +1,39 @@
+.loginboxWrapper {
+  @apply flex h-screen;
+}
+
+.loginbox {
+  @apply max-w-lg w-full m-auto;
+
+  .loginboxInner {
+    @apply py-4 px-6;
+  }
+
+  h1 {
+    @apply text-3xl mb-4;
+  }
+
+  form {
+    label {
+      @apply block mb-4;
+
+      span {
+        @apply block;
+      }
+    }
+
+    input {
+      @apply block w-full px-4 py-1 rounded outline-none
+        border border-opacity-20 border-black focus:border-blue;
+
+      &[type="password"] {
+        font-family: '__passdot';
+      }
+
+      &[type="submit"] {
+        @apply mt-8 border-none cursor-pointer
+          bg-blue text-white hover:bg-blue-light;
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.card {
+  @apply border border-black border-opacity-10 shadow-2xl;
+}
+
+.card, .card :global(iframe) {
+  @apply rounded-lg overflow-hidden;
+}
+
+/*# sourceMappingURL=Card.module.css.map */

@@ -1,0 +1,22 @@
+{
+  "header": {
+    "logged-in": "Logged in as {}.",
+    "not-logged-in": "Not logged in.",
+    "sign-in": "Sign in",
+    "sign-out": "Sign out",
+    "new-account": "Join"
+  },
+  "form": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "select_option": "Select option",
+    "select_options": "Select options",
+    "n_selected": "{} selected"
+  },
+  "page/login": {
+    "title": "Login with Ina",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login"
+  }
+}

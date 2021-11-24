@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "include": ["src/**/*", ".storybook/PreviewWrapper.tsx"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*", "dist/*"],
+  "compilerOptions": {
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "isolatedModules": true
+  }
+}

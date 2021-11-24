@@ -1,0 +1,37 @@
+.header {
+  @apply select-none;
+
+  .container {
+    @apply flex items-center container;
+  }
+
+  .branding {
+    @apply flex h-16 flex-grow-0 items-center text-currenti no-underline cursor-pointer;
+  }
+
+  .nav {
+    @apply flex flex-grow;
+
+    a {
+      @apply block mr-2 text-current no-underline hover:underline;
+    }
+  }
+
+  .loginInfo {
+    @apply flex;
+
+    a {
+      @apply cursor-pointer no-underline hover:underline text-blue;
+    }
+
+    span.hasRightPadding {
+      @apply block pr-2;
+    }
+
+    .divider {
+      @apply opacity-25 text-sm px-1;
+    }
+  }
+}
+
+/*# sourceMappingURL=Header.module.css.map */
