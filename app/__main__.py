@@ -2,9 +2,18 @@ from os import getcwd, path
 from flask import Flask, send_file, jsonify
 from pkg.music import MusicPlayer
 
-wd = getcwd()
+
+class Device:
+    wd: str
+    music_player: MusicPlayer
+
+    def __init__(self):
+        self.wd = getcwd()
+        self.music_player = MusicPlayer(self.wd)
+
+
 app = Flask(__name__)
-music_player = MusicPlayer(wd)
+device = Device()
 
 
 @app.get('/')
@@ -32,7 +41,7 @@ def get_device_info():
 
 @app.get('/device/icon')
 def get_device_icon():
-    return send_file(path.join(wd, 'device_icon.png'))
+    return send_file(path.join(device.wd, 'device_icon.png'))
 
 
 @app.get('/device/light')
@@ -59,12 +68,12 @@ def get_device_notepad():
 
 @app.get('/music')
 def get_music():
-    return jsonify(music_player.get_music_info())
+    return jsonify(device.music_player.get_music_info())
 
 
 @app.post('/music/play')
 def post_music_play():
-    music_player.play()
+    device.music_player.play()
     return app.response_class(
         response='{"status":"ok"}',
         status=200,
@@ -74,7 +83,7 @@ def post_music_play():
 
 @app.post('/music/stop')
 def post_music_stop():
-    music_player.stop()
+    device.music_player.stop()
     return app.response_class(
         response='{"status":"ok"}',
         status=200,
@@ -84,7 +93,7 @@ def post_music_stop():
 
 @app.post('/music/next')
 def post_music_next():
-    music_player.next()
+    device.music_player.next()
     return app.response_class(
         response='{"status":"ok"}',
         status=200,
@@ -94,7 +103,7 @@ def post_music_next():
 
 @app.post('/music/prev')
 def post_music_prev():
-    music_player.prev()
+    device.music_player.prev()
     return app.response_class(
         response='{"status":"ok"}',
         status=200,
