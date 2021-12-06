@@ -6,7 +6,7 @@ from typing import List
 import vlc
 
 regex = r'^[ \t\n\r]*((?:[^,\n\\]|\\.)+),((?:[^,\n\\]|\\.)+),((?:[^,' \
-        r'\n\\]|\\.)+),([0-9]+:[0-5][0-9])[ \t]*(?:\n|$)'
+        r'\n\\]|\\.)+),([0-9]+):([0-5][0-9])[ \t]*(?:\n|$)'
 
 
 @dataclass
@@ -14,7 +14,7 @@ class MusicInfo:
     title: str
     artist: str
     file: str
-    duration: str
+    duration: int
 
 
 class MusicPlayer:
@@ -49,7 +49,7 @@ class MusicPlayer:
                 title=caps.group(1),
                 artist=caps.group(2),
                 file=caps.group(3),
-                duration=caps.group(4)
+                duration=int(caps.group(4)) * 60000 + int(caps.group(5)) * 1000
             ))
 
         self.playlist = playlist
@@ -60,6 +60,12 @@ class MusicPlayer:
 
     def get_music_info(self):
         return self.playlist[self.play_index]
+
+    def is_playing(self):
+        return self.vlc_instance.is_playing()
+
+    def get_time(self):
+        return self.vlc_instance.get_time()
 
     def play(self):
         self.vlc_instance.stop()

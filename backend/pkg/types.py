@@ -20,6 +20,11 @@ class FanStatusResponse:
 
 
 @dataclass
+class JukeboxCurrentMusicResponse(MusicInfo):
+    is_playing: bool
+    current_time: int
+
+
+@dataclass
 class JukeboxStatusResponse:
-    current_music: MusicInfo
     playlist: List[MusicInfo]

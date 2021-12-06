@@ -5,7 +5,7 @@ from flask import Flask, send_file, jsonify, request
 from pkg.music import MusicPlayer
 from pkg.notepad import Notepad
 from pkg.types import LightStatusResponse, AlertStatusResponse, \
-    FanStatusResponse
+    FanStatusResponse, JukeboxStatusResponse, JukeboxCurrentMusicResponse
 
 
 class Device:
@@ -18,8 +18,8 @@ class Device:
 
     def __init__(self):
         self.wd = getcwd()
-        self.notepad = Notepad(self.wd)
         self.music_player = MusicPlayer(self.wd)
+        self.notepad = Notepad(self.wd)
 
 
 app = Flask(__name__)
@@ -114,7 +114,22 @@ def post_device_fan():
 
 @app.get('/device/jukebox')
 def get_device_jukebox():
-    return jsonify(device.music_player.get_music_info())
+    return jsonify(JukeboxStatusResponse(
+        playlist=device.music_player.get_playlist()
+    ))
+
+
+@app.get('/device/jukebox/current_music')
+def get_device_jukebox_current_music():
+    current_music = device.music_player.get_music_info()
+    return jsonify(JukeboxCurrentMusicResponse(
+        title=current_music.title,
+        artist=current_music.artist,
+        file=current_music.file,
+        duration=current_music.duration,
+        is_playing=device.music_player.is_playing(),
+        current_time=device.music_player.get_time()
+    ))
 
 
 @app.post('/device/jukebox/play')
