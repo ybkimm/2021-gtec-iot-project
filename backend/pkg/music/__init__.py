@@ -1,8 +1,9 @@
-from os import path, getcwd
 import re
-from typing import List
-import vlc
 from dataclasses import dataclass
+from os import path
+from typing import List
+
+import vlc
 
 regex = r'^[ \t\n\r]*((?:[^,\n\\]|\\.)+),((?:[^,\n\\]|\\.)+),((?:[^,' \
         r'\n\\]|\\.)+),([0-9]+:[0-5][0-9])[ \t]*(?:\n|$)'
@@ -53,6 +54,9 @@ class MusicPlayer:
 
         self.playlist = playlist
         fp.close()
+
+    def get_playlist(self):
+        return self.playlist
 
     def get_music_info(self):
         return self.playlist[self.play_index]

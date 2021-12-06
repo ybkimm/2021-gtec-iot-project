@@ -1,4 +1,5 @@
 from os import getcwd
+
 from . import MusicPlayer
 
 
