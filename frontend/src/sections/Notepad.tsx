@@ -25,6 +25,10 @@ const Notepad = () => {
   const [t] = useTranslation('notepad')
   const [content, setContent] = useState<string>('')
 
+  const handleInput = (v: string): boolean => {
+    return /^[a-zA-Z0-9.*_-]+$/.test(v)
+  }
+
   const [response, isLoading, apiError] = useFetch<NotepadResponse>(
     `${backendHost}/device/notepad`,
     (isFirstTime) => ({
@@ -51,8 +55,9 @@ const Notepad = () => {
             rows={2}
             type="text"
             hasError={apiError != null}
-            onSave={setContent}
             value={response?.content ? parseNotepadBody(response.content) : ''}
+            onInput={handleInput}
+            onSave={setContent}
           />
         )}
     </Section>
