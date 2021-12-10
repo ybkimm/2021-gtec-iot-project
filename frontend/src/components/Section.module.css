@@ -1,0 +1,8 @@
+.section {
+  @apply p-8 pt-6 mb-8 mx-2 shadow bg-white
+  rounded border border-black border-opacity-10;
+
+  .leading {
+    @apply text-2xl mb-6;
+  }
+}
