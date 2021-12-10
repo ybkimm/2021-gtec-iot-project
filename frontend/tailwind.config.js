@@ -1,3 +1,5 @@
+/* eslint-disable quote-props */
+
 module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.tsx'],
@@ -14,10 +16,21 @@ module.exports = {
         DEFAULT: '#60a5ff'
       },
       darkblue: '#3c3f59',
+      gray: {
+        100: '#f3f3f3',
+        200: '#e0e0e0',
+        DEFAULT: '#888888'
+      },
       white: '#ffffff',
       black: '#000000'
     },
-    extend: {}
+    extend: {
+      minWidth: {
+        '16': '4rem',
+        '20': '5rem',
+        '24': '6rem'
+      }
+    }
   },
   variants: {
     extend: {
