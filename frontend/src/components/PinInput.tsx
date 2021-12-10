@@ -17,6 +17,7 @@ export interface PinInputProps {
   type: 'number' | 'password' | 'text'
   autoSaveTimeout?: number
   hasError?: boolean
+  value?: string
 
   onInput?: (v: string) => boolean | void
   onSave?: (v: string) => void
@@ -27,6 +28,12 @@ const PinInput = (props: PinInputProps): ReactElement => {
   const saveTimer = useRef<never>(undefined as never)
 
   const [value, setValue] = useState<string[]>([])
+  useEffect(() => {
+    console.log('value update', props.value)
+    if (props.value != null) {
+      setValue(props.value.split(''))
+    }
+  }, [props.value])
 
   // Auto save
   useEffect(() => {

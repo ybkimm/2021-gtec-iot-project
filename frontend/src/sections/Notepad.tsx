@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PinInput from '../components/PinInput'
 import Section from '../components/Section'
 import { backendHost } from '../configs'
@@ -12,11 +12,20 @@ const buildNotepadBody = (s: string): string => {
   return body
 }
 
+const parseNotepadBody = (s: string): string => {
+  return s.substr(0, 16).trimEnd() + s.substr(17, 16).trimEnd()
+}
+
+interface NotepadResponse {
+  status: boolean
+  content: string
+}
+
 const Notepad = () => {
   const [t] = useTranslation('notepad')
   const [content, setContent] = useState<string>('')
 
-  const [, isLoading, apiError] = useFetch(
+  const [response, isLoading, apiError] = useFetch<NotepadResponse>(
     `${backendHost}/device/notepad`,
     (isFirstTime) => ({
       doInitialRequest: true,
@@ -28,13 +37,24 @@ const Notepad = () => {
 
   return (
     <Section title={t('leading')}>
-      <PinInput
-        cols={16}
-        rows={2}
-        type="text"
-        hasError={apiError != null}
-        onSave={setContent}
-      />
+      {isLoading
+        ? (
+          <PinInput
+            cols={16}
+            rows={2}
+            type="text"
+          />
+        )
+        : (
+          <PinInput
+            cols={16}
+            rows={2}
+            type="text"
+            hasError={apiError != null}
+            onSave={setContent}
+            value={response?.content ? parseNotepadBody(response.content) : ''}
+          />
+        )}
     </Section>
   )
 }
