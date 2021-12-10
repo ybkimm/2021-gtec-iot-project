@@ -28,3 +28,15 @@ class JukeboxCurrentMusicResponse(MusicInfo):
 @dataclass
 class JukeboxStatusResponse:
     playlist: List[MusicInfo]
+
+
+@dataclass
+class NotepadContentResponse:
+    status: str
+    content: str
+
+
+@dataclass
+class APIResponse:
+    status: str
+    error: str = None

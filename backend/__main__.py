@@ -1,11 +1,13 @@
 from os import getcwd, path
 
 from flask import Flask, send_file, jsonify, request
+from flask_cors import CORS
 
 from pkg.music import MusicPlayer
 from pkg.notepad import Notepad
 from pkg.types import LightStatusResponse, AlertStatusResponse, \
-    FanStatusResponse, JukeboxStatusResponse, JukeboxCurrentMusicResponse
+    FanStatusResponse, JukeboxStatusResponse, JukeboxCurrentMusicResponse, \
+    NotepadContentResponse, APIResponse
 
 
 class Device:
@@ -22,8 +24,10 @@ class Device:
         self.notepad = Notepad(self.wd)
 
 
-app = Flask(__name__)
 device = Device()
+app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
 
 
 @app.get('/')
@@ -44,7 +48,7 @@ def get_health():
 def get_device_info():
     return app.response_class(
         response='{"class":"dummy","name":"Dummy Device",'
-                 '"features":["light","jukebox","alert","notepad","fan"]}',
+                 '"features":["notepad","jukebox","light","alert","fan"]}',
         status=200,
         mimetype='application/json'
     )
@@ -162,6 +166,22 @@ def post_device_jukebox_next():
     )
 
 
+@app.post('/device/jukebox/seek_to')
+def post_device_music_seek_to():
+    t: int
+    try:
+        t = int(request.form.get('t'))
+    except ValueError as e:
+        return 't must be int', 400
+
+    device.music_player.seek_to(t)
+    return app.response_class(
+        response='{"status":"ok"}',
+        status=200,
+        mimetype='application/json'
+    )
+
+
 @app.post('/device/jukebox/prev')
 def post_device_music_prev():
     device.music_player.prev()
@@ -174,20 +194,25 @@ def post_device_music_prev():
 
 @app.get('/device/notepad')
 def get_device_notepad():
-    return str(device.notepad.get_content(), 'utf-8')
+    content = str(device.notepad.get_content(), 'utf-8')
+    return jsonify(NotepadContentResponse(
+        status='ok',
+        content=content
+    ))
 
 
 @app.put('/device/notepad')
 def put_device_notepad():
     content = request.get_data()
     if len(content) < 33:
-        return 'short content', 400
+        return jsonify(APIResponse(
+            status='error',
+            error='short content'
+        )), 400
     device.notepad.update(content)
-    return app.response_class(
-        response='{"status":"ok"}',
-        status=200,
-        mimetype='application/json'
-    )
+    return jsonify(APIResponse(
+        status='ok'
+    ))
 
 
 if __name__ == "__main__":

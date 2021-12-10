@@ -20,15 +20,26 @@ class MusicInfo:
 class MusicPlayer:
     wd: str
     vlc_instance: vlc.MediaPlayer
+    event_manager: vlc.EventManager
     playlist: List[MusicInfo]
     play_index: int
 
     def __init__(self, wd):
         self.wd = wd
-        self.vlc_instance = vlc.MediaPlayer()
         self.play_index = 0
 
+        self.reset()
+
         self.parse_playlist(wd)
+
+    def reset(self):
+        vlc_instance = vlc.MediaPlayer()
+        self.vlc_instance = vlc_instance
+        self.event_manager = vlc_instance.event_manager()
+        self.event_manager.event_attach(
+            vlc.EventType.MediaPlayerEndReached,
+            self.on_play_ended
+        )
 
     def parse_playlist(self, wd):
         playlist = []
@@ -67,29 +78,34 @@ class MusicPlayer:
     def get_time(self):
         return self.vlc_instance.get_time()
 
+    def seek_to(self, t: int):
+        self.vlc_instance.set_time(t)
+
     def play(self):
-        self.vlc_instance.stop()
+        self.stop()
         self.set_media(self.playlist[self.play_index])
         self.vlc_instance.play()
 
     def next(self):
         self.adjust_play_index(1)
-        self.vlc_instance.stop()
+        self.stop()
         self.set_media(self.playlist[self.play_index])
         self.vlc_instance.play()
 
     def prev(self):
         self.adjust_play_index(-1)
-        self.vlc_instance.stop()
+        self.stop()
         self.set_media(self.playlist[self.play_index])
         self.vlc_instance.play()
 
     def stop(self):
-        self.vlc_instance.stop()
+        if self.vlc_instance.is_playing():
+            self.vlc_instance.stop()
 
     def set_media(self, item: MusicInfo):
         media = vlc.Media(item.file)
         self.vlc_instance.set_media(media)
+        self.vlc_instance.set_time(0)
 
     def adjust_play_index(self, n: int):
         self.play_index += n
@@ -97,3 +113,7 @@ class MusicPlayer:
             self.play_index -= len(self.playlist)
         elif self.play_index < 0:
             self.play_index += len(self.playlist)
+
+    def on_play_ended(self, event):
+        self.reset()
+        self.next()
