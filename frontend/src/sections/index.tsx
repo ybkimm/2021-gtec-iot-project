@@ -1,16 +1,20 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
+import Jukebox from './Jukebox'
 import Notepad from './Notepad'
 
 export const sectionMap: {
-  [key: string]: () => ReactNode
+  [key: string]: () => ReactElement
   notepad: typeof Notepad
+  jukebox: typeof Jukebox
 } = {
-  notepad: Notepad
+  notepad: Notepad,
+  jukebox: Jukebox
 }
 
 export const iconMap: {
   [key: string]: string
   notepad: string
 } = {
-  notepad: 'pencil'
+  notepad: 'pencil',
+  jukebox: 'onpu'
 }

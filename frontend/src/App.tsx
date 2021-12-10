@@ -1,4 +1,4 @@
-import React, { ReactElement, useReducer } from 'react'
+import React, { ReactElement, ReactNode, useReducer } from 'react'
 import styles from './App.module.css'
 import AppWrapper from './AppWrapper'
 import './assets/global.css'
@@ -10,6 +10,7 @@ import useHashScroll from './hooks/useHashScroll'
 import { DeviceInfo } from './internal/types'
 import { classNames } from './internal/utils/className'
 import { defaultDeviceStatus, deviceStatusReducer } from './reducers/deviceStatus'
+import { sectionMap } from './sections'
 import Notepad from './sections/Notepad'
 import Sidebar from './sections/Sidebar'
 
@@ -48,11 +49,16 @@ export default function App (): ReactElement {
           />
 
           <div className={styles.main}>
-            {deviceInfo?.features.map((feature) => (
-              <div key={feature} ref={scrollManager.ref(`feature_${feature}`)}>
-                {feature === 'notepad' && <Notepad />}
-              </div>
-            ))}
+            {deviceInfo?.features.map((feature) => {
+              const Section = feature in sectionMap
+                ? sectionMap[feature]
+                : (): ReactElement => <></>
+              return (
+                <div key={feature} ref={scrollManager.ref(`feature_${feature}`)}>
+                  <Section />
+                </div>
+              )
+            })}
 
             <div className={styles.section} ref={scrollManager.ref('notepad')}>
               <h1 className={styles.leading}>메모장</h1>
