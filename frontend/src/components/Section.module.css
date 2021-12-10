@@ -5,4 +5,8 @@
   .leading {
     @apply text-2xl mb-6;
   }
+
+  .noSectionPadding {
+    @apply -mx-8;
+  }
 }
