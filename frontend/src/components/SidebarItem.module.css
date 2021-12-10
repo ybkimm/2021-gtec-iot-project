@@ -1,0 +1,20 @@
+.sidebarItem {
+  @apply w-48 p-3 px-6 bg-transparent text-black rounded mb-2
+    transition-colors cursor-pointer select-none;
+
+  &:hover {
+    @apply bg-gray-200;
+  }
+
+  &.isActive {
+    @apply bg-blue text-white;
+
+    &:hover {
+      @apply bg-blue-light;
+    }
+  }
+
+  .icon {
+    @apply inline-block pr-2 fill-current;
+  }
+}
