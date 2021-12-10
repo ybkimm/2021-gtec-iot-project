@@ -1,8 +1,16 @@
 {
   "sections": {
-    "notepad": "Notepad"
+    "notepad": "Notepad",
+    "jukebox": "Jukebox",
+    "light": "Light",
+    "alert": "Alert",
+    "fan": "Fan"
   },
   "notepad": {
     "leading": "Notepad"
+  },
+  "jukebox": {
+    "leading": "Jukebox",
+    "current-playing": "Current playing"
   }
 }

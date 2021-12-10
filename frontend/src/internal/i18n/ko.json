@@ -1,8 +1,16 @@
 {
   "sections": {
-    "notepad": "메모장"
+    "notepad": "메모장",
+    "jukebox": "쥬크박스",
+    "light": "조명",
+    "alert": "경고 방송",
+    "fan": "선풍기"
   },
   "notepad": {
     "leading": "메모장"
+  },
+  "jukebox": {
+    "leading": "쥬크박스",
+    "current-playing": "지금 재생중"
   }
 }

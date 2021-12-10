@@ -3110,6 +3110,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tailwindcss/aspect-ratio@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@tailwindcss/aspect-ratio@npm:0.4.0"
+  peerDependencies:
+    tailwindcss: ">=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1"
+  checksum: 106ee15ce10445006a0b6cfb70bf37fc9b47b4e4e146455e61ed6c0c6b6d18255175d8f6991df9ee686d9b5afe4edc3158a22266f22a6b6e8878fd73212efef5
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:1":
   version: 1.1.2
   resolution: "@tootallnate/once@npm:1.1.2"
@@ -14036,6 +14045,7 @@ resolve@^2.0.0-next.3:
     "@storybook/addon-links": ^6.3.12
     "@storybook/addon-postcss": ^2.0.0
     "@storybook/react": ^6.3.12
+    "@tailwindcss/aspect-ratio": ^0.4.0
     "@tsconfig/recommended": ^1.0.1
     "@types/node": ^16.9.1
     "@types/react": ^17.0.20
