@@ -27,18 +27,18 @@ const PinInput = (props: PinInputProps): ReactElement => {
   const textInput = useRef<HTMLInputElement>(null)
   const saveTimer = useRef<never>(undefined as never)
 
-  const [value, setValue] = useState<string[]>([])
+  const [value, setValue] = useState<string>('')
   useEffect(() => {
     console.log('value update', props.value)
     if (props.value != null) {
-      setValue(props.value.split(''))
+      setValue(props.value)
     }
   }, [props.value])
 
   // Auto save
   useEffect(() => {
     saveTimer.current = setTimeout(() => {
-      props.onSave?.call(undefined, value.join(''))
+      props.onSave?.call(undefined, value)
     }, props.autoSaveTimeout || defaultAutoSaveTimeout) as never
 
     return () => {
@@ -76,20 +76,15 @@ const PinInput = (props: PinInputProps): ReactElement => {
         const len = prev.length
 
         if (len === 0) {
-          return new Array(props.cols).fill('\t')
+          return ''.padEnd(props.cols, '\t')
         }
 
         if (len > props.cols * (props.rows - 1)) {
           return prev
         }
 
-        const result = [...prev]
-        let i = Math.ceil(len / props.cols) * props.cols - len
-        for (; i > 0; i--) {
-          result.push('\t')
-        }
-
-        return result
+        const i = Math.ceil(len / props.cols) * props.cols - len
+        return prev.padEnd(i, '\t')
       })
       break
 
@@ -106,13 +101,13 @@ const PinInput = (props: PinInputProps): ReactElement => {
   }
 
   const handleInput = (e: FormEvent<HTMLInputElement>) => {
+    console.log(e.currentTarget.value)
     if (props.onInput?.call(undefined, e.currentTarget.value) === false) {
       return
     }
 
     setValue(
       e.currentTarget.value.substr(0, props.cols * props.rows)
-        .split('')
     )
   }
 
@@ -150,7 +145,7 @@ const PinInput = (props: PinInputProps): ReactElement => {
         onInput={handleInput}
         onKeyDown={handleKeyDown}
         onSelect={handleSelect}
-        value={value.join('')}
+        value={value}
       />
     </div>
   )
