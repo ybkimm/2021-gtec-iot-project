@@ -1,0 +1,7 @@
+.sidebar {
+  @apply px-4;
+
+  .stickySidebar {
+    @apply sticky top-4;
+  }
+}
