@@ -8,12 +8,12 @@ import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
 import postcssFlexbugsFixes from 'postcss-flexbugs-fixes'
 import postcssImport from 'postcss-import'
-import postcssNested from 'postcss-nested'
 import livereload from 'rollup-plugin-livereload'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
 import { terser } from 'rollup-plugin-terser'
 import tailwindcss from 'tailwindcss'
+import tailwindNesting from 'tailwindcss/nesting'
 
 const extensions = ['.js', '.ts', '.jsx', '.tsx', '.mjs']
 const production = !process.env.ROLLUP_WATCH
@@ -48,9 +48,9 @@ const config = [{
     }),
     postcss({
       plugins: [
-        tailwindcss(),
-        postcssNested(),
         postcssImport(),
+        tailwindNesting(),
+        tailwindcss(),
         autoprefixer(),
         postcssFlexbugsFixes(),
         cssnano({

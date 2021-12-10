@@ -2,7 +2,7 @@
 
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.tsx'],
+  content: ['./src/**/*.tsx'],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     colors: {
@@ -30,11 +30,6 @@ module.exports = {
         '20': '5rem',
         '24': '6rem'
       }
-    }
-  },
-  variants: {
-    extend: {
-      borderWidth: ['focus']
     }
   },
   plugins: [
