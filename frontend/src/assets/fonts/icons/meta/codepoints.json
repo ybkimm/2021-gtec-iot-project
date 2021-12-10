@@ -1,5 +1,9 @@
 {
   "__invalid": 57344,
   "downArrow": 57345,
-  "person": 57346
+  "person": 57346,
+  "chart": 57347,
+  "tune": 57348,
+  "pencil": 57349,
+  "circle": 57350
 }
