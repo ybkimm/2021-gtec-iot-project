@@ -2,7 +2,6 @@ import i18next, { i18n, TFunction } from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { useTranslation as useI18n, UseTranslationResponse } from 'react-i18next'
 import en from './en.json'
-import jp from './jp.json'
 import ko from './ko.json'
 
 let instance: i18n
@@ -25,9 +24,9 @@ export function init (): Promise<TFunction> {
       caches: ['localStorage'],
       excludeCacheFor: ['cimode']
     },
-    supportedLngs: ['en', 'jp', 'ko'],
+    supportedLngs: ['en', 'ko'],
     nonExplicitSupportedLngs: true,
     load: 'languageOnly',
-    resources: { en, jp, ko }
+    resources: { en, ko }
   })
 }

@@ -1,22 +1,8 @@
 {
-  "header": {
-    "logged-in": "{} 계정으로 로그인 함.",
-    "not-logged-in": "로그인 하지 않음.",
-    "sign-in": "로그인",
-    "sign-out": "로그아웃",
-    "new-account": "계정 만들기"
+  "sections": {
+    "notepad": "메모장"
   },
-  "form": {
-    "submit": "완료",
-    "cancel": "취소",
-    "select_option": "옵션을 선택해주세요",
-    "select_options": "옵션을 선택해주세요",
-    "n_selected": "{}개 선택함"
-  },
-  "page/login": {
-    "title": "Ina 계정으로 로그인",
-    "email": "메일 주소",
-    "password": "비밀번호",
-    "submit": "로그인"
+  "notepad": {
+    "leading": "메모장"
   }
 }
