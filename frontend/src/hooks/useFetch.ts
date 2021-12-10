@@ -1,10 +1,9 @@
-/* global RequestInfo, RequestInit */
+/* global RequestInit */
 
-import { DependencyList, useEffect, useMemo, useRef, useState } from 'react'
+import { DependencyList, useMemo, useRef, useState } from 'react'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
 export interface FetchParams<T> extends Omit<RequestInit, 'signal' | 'mode'> {
-  saveMethod?: string
   handleResponse?: (resp: Response) => T | Promise<T>
   doInitialRequest?: boolean
 }
@@ -50,6 +49,7 @@ const useFetch = <T>(
       }, (err) => {
         if (!controller.signal.aborted) {
           setError(err)
+          setResponse(null)
           setLoading(false)
         }
         return null
@@ -59,13 +59,14 @@ const useFetch = <T>(
           return null
         }
         setResponse(v)
+        setError(null)
       })
       .finally(() => {
         isFirstTime.current = false
       })
 
     return () => controller.abort()
-  }, [req, params])
+  }, [req, params, ...(deps || [])])
 
   return [
     response,
