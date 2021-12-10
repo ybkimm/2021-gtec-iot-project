@@ -1,0 +1,9 @@
+.button {
+  @apply inline-block px-4 py-2 min-w-20 text-center
+    text-white bg-blue shadow rounded cursor-pointer transition-shadow
+    hover:shadow-lg hover:bg-blue-light;
+
+  +.button {
+    @apply ml-2;
+  }
+}
