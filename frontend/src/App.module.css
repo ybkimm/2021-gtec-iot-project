@@ -23,7 +23,7 @@
 }
 
 .main {
-  @apply flex-grow;
+  @apply flex-grow min-w-0;
 
   > .leading {
     @apply px-4 text-lg mb-8;
