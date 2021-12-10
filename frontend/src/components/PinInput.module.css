@@ -1,0 +1,38 @@
+.pinInput {
+  @apply relative text-center rounded p-2 select-none
+    border border-opacity-10 border-black
+    shadow-none
+    focus-within:border-blue focus-within:shadow
+    transition-all;
+
+  &.hasError {
+    @apply border-red border-opacity-50
+      focus-within:border-opacity-100;
+  }
+
+  .pins {
+    @apply table mx-auto;
+
+    .row {
+      @apply table-row;
+
+      .col {
+        @apply table-cell w-6 h-6 text-center leading-6;
+
+        &.isSelected {
+          @apply bg-blue bg-opacity-20;
+        }
+
+        &.isEmpty::after {
+          content: '*';
+          font-family: '__passdot';
+          @apply text-black text-opacity-10;
+        }
+      }
+    }
+  }
+
+  .input {
+    @apply pointer-events-none opacity-0 absolute bottom-0 left-0 w-0 h-0;
+  }
+}
