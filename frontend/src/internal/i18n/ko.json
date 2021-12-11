@@ -21,5 +21,9 @@
   "alert": {
     "leading": "경고음 울리기",
     "toggle-alert": "전원"
+  },
+  "fan": {
+    "leading": "선풍기",
+    "toggle-fan": "전원"
   }
 }

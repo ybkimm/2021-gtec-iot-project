@@ -21,5 +21,9 @@
   "alert": {
     "leading": "Alert",
     "toggle-alert": "Toggle alert"
+  },
+  "fan": {
+    "leading": "Fan",
+    "toggle-fan": "Toggle fan"
   }
 }
