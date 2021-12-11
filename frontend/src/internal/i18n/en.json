@@ -17,5 +17,9 @@
     "leading": "Lights",
     "turn-on": "Turn on",
     "turn-off": "Turn off"
+  },
+  "alert": {
+    "leading": "Alert",
+    "toggle-alert": "Toggle alert"
   }
 }

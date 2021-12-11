@@ -17,5 +17,9 @@
     "leading": "조명",
     "turn-on": "전원 켜기",
     "turn-off": "전원 끄기"
+  },
+  "alert": {
+    "leading": "경고음 울리기",
+    "toggle-alert": "전원"
   }
 }
