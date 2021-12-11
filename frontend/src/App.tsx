@@ -1,15 +1,12 @@
-import React, { ReactElement, ReactNode, useReducer } from 'react'
+import React, { ReactElement } from 'react'
 import styles from './App.module.css'
 import AppWrapper from './AppWrapper'
 import './assets/global.css'
-import Button from './components/Button'
 import Container from './components/Container'
 import { backendHost } from './configs'
 import useFetch from './hooks/useFetch'
 import useHashScroll from './hooks/useHashScroll'
 import { DeviceInfo } from './internal/types'
-import { classNames } from './internal/utils/className'
-import { defaultDeviceStatus, deviceStatusReducer } from './reducers/deviceStatus'
 import { sectionMap } from './sections'
 import Sidebar from './sections/Sidebar'
 
@@ -17,11 +14,7 @@ const dummyDevice = { class: 'dummy', name: 'Loading', features: [] }
 
 export default function App (): ReactElement {
   const [scrollManager, currentHash] = useHashScroll()
-  const [deviceStatus, dispatchDeivceStatus] = useReducer(
-    deviceStatusReducer,
-    defaultDeviceStatus
-  )
-  const [deviceInfo, isLoading, deviceInfoError] = useFetch<DeviceInfo>(
+  const [deviceInfo, isLoading] = useFetch<DeviceInfo>(
     `${backendHost}/device`,
     () => ({
       method: 'GET'

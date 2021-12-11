@@ -1,5 +1,4 @@
 import React, {
-  FormEvent,
   ReactElement,
   MouseEvent,
   KeyboardEvent,
@@ -8,8 +7,6 @@ import React, {
   SyntheticEvent, useEffect, ChangeEvent
 } from 'react'
 import styles from './PinInput.module.css'
-
-const defaultAutoSaveTimeout = 500 // ms
 
 export interface PinInputProps {
   cols: number

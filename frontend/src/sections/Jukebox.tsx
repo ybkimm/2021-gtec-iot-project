@@ -4,7 +4,6 @@ import NoSectionPadding from '../components/NoSectionPadding'
 import Section from '../components/Section'
 import { backendHost } from '../configs'
 import useFetch from '../hooks/useFetch'
-
 import useTrigger from '../hooks/useTrigger'
 import { useTranslation } from '../internal/i18n'
 import { classNames } from '../internal/utils/className'

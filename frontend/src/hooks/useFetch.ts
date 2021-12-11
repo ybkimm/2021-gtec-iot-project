@@ -17,17 +17,15 @@ const useFetch = <T>(
   const isFirstTime = useRef<boolean>(true)
 
   const req = useMemo(() => {
-    const req = typeof reqFactory === 'function'
+    return typeof reqFactory === 'function'
       ? reqFactory(isFirstTime.current)
       : reqFactory
-    return req
   }, [reqFactory, isFirstTime.current])
 
   const params = useMemo(() => {
-    const params = typeof paramsFactory === 'function'
+    return typeof paramsFactory === 'function'
       ? paramsFactory(isFirstTime.current)
       : paramsFactory
-    return params
   }, [paramsFactory, isFirstTime.current])
 
   useEffect(() => {
