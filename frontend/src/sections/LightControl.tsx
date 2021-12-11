@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import React, { useEffect } from 'react'
 import NoSectionPadding from '../components/NoSectionPadding'
 import Section from '../components/Section'
 import ToggleButton from '../components/ToggleButton'
