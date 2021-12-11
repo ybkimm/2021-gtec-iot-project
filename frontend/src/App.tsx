@@ -11,7 +11,6 @@ import { DeviceInfo } from './internal/types'
 import { classNames } from './internal/utils/className'
 import { defaultDeviceStatus, deviceStatusReducer } from './reducers/deviceStatus'
 import { sectionMap } from './sections'
-import Notepad from './sections/Notepad'
 import Sidebar from './sections/Sidebar'
 
 const dummyDevice = { class: 'dummy', name: 'Loading', features: [] }
@@ -59,61 +58,6 @@ export default function App (): ReactElement {
                 </div>
               )
             })}
-
-            <div className={styles.section} ref={scrollManager.ref('notepad')}>
-              <h1 className={styles.leading}>메모장</h1>
-
-              <textarea className={styles.memo}></textarea>
-            </div>
-
-            <div className={styles.section} ref={scrollManager.ref('dashboard')}>
-              <h1 className={styles.leading}>대시보드</h1>
-
-              <div className={styles.status}>
-                <div className={
-                  classNames(
-                    styles.statusItem,
-                    deviceStatus.light ? styles.isEnabled : null
-                  )
-                }>
-                    전등
-                </div>
-
-                <div className={
-                  classNames(
-                    styles.statusItem,
-                    deviceStatus.fan ? styles.isEnabled : null
-                  )
-                }>
-                    환풍기
-                </div>
-
-                <div className={
-                  classNames(
-                    styles.statusItem,
-                    deviceStatus.fan ? styles.isEnabled : null
-                  )
-                }>
-                    부저
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.section} ref={scrollManager.ref('control')}>
-              <h1 className={styles.leading}>기기 수동 컨트롤</h1>
-
-              <h2>전등</h2>
-              <Button>켜기</Button>
-              <Button>끄기</Button>
-
-              <h2>FAN</h2>
-              <Button>켜기</Button>
-              <Button>끄기</Button>
-
-              <h2>비상 경고</h2>
-              <Button>시작</Button>
-              <Button>정지</Button>
-            </div>
           </div>
         </div>
       </Container>
