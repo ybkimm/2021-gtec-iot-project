@@ -27,7 +27,7 @@ class AlertStatusResponse(APIResponse):
 
 @dataclass
 class FanStatusResponse(APIResponse):
-    is_on: bool
+    active: bool
 
 
 @dataclass

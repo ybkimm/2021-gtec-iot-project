@@ -26,6 +26,7 @@ class Device:
         self.notepad = Notepad(self.wd)
         self.light_status = [False, False]
         self.alert_status = False
+        self.fan_status = False
 
 
 device = Device()
@@ -98,6 +99,37 @@ def post_device_alert():
     ))
 
 
+@app.get('/device/fan')
+def get_device_fan():
+    return jsonify(FanStatusResponse(
+        status='ok',
+        active=device.fan_status,
+        timestamp=now()
+    ))
+
+
+@app.post('/device/fan')
+def post_device_fan():
+    action = request.args.get('action')
+    if action == 'toggle':
+        device.fan_status = not device.fan_status
+    elif action == 'on':
+        device.fan_status = True
+    elif action == 'off':
+        device.fan_status = False
+    else:
+        return ErrorResponse(
+            status='bad request',
+            error='unknown action',
+            timestamp=now()
+        ), 400
+
+    return jsonify(APIResponse(
+        status='ok',
+        timestamp=now()
+    ))
+
+
 @app.get('/device/light')
 def get_device_light():
     return jsonify(LightStatusResponse(
@@ -144,32 +176,6 @@ def post_device_light():
             timestamp=now()
         ), 400
 
-    return jsonify(APIResponse(
-        status='ok',
-        timestamp=now()
-    ))
-
-
-@app.get('/device/fan')
-def get_device_fan():
-    return jsonify(FanStatusResponse(
-        status='ok',
-        is_on=device.fan_status,
-        timestamp=now()
-    ))
-
-
-@app.post('/device/fan')
-def post_device_fan():
-    action = request.form.get('action')
-    if action == 'toggle':
-        device.fan_status = not device.fan_status
-    elif action == 'on':
-        device.fan_status = True
-    elif action == 'off':
-        device.fan_status = False
-    else:
-        return 'invalid request', 400
     return jsonify(APIResponse(
         status='ok',
         timestamp=now()
