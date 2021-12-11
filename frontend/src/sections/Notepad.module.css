@@ -1,0 +1,10 @@
+.wrapper {
+  @apply relative;
+
+  .loading-indicator {
+    @apply absolute top-2 left-2 w-4 h-4 rounded-full
+      pointer-events-none z-10
+      bg-transparent
+      isActive:bg-blue isActive:bg-opacity-50 isActive:shadow;
+  }
+}

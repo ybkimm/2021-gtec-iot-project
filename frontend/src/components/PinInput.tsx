@@ -5,7 +5,7 @@ import React, {
   KeyboardEvent,
   useRef,
   useState,
-  SyntheticEvent, useEffect
+  SyntheticEvent, useEffect, ChangeEvent
 } from 'react'
 import styles from './PinInput.module.css'
 
@@ -19,33 +19,41 @@ export interface PinInputProps {
   hasError?: boolean
   value?: string
 
-  onInput?: (v: string) => boolean | void
-  onSave?: (v: string) => void
+  inputFilter?: (v: string) => boolean | void
+  onChange?: (v: string) => void
 }
 
 const PinInput = (props: PinInputProps): ReactElement => {
-  const textInput = useRef<HTMLInputElement>(null)
-  const saveTimer = useRef<never>(undefined as never)
-
   const [value, setValue] = useState<string>('')
+
+  // Handle props.value
   useEffect(() => {
-    if (props.value != null) {
+    if (typeof props.value !== 'string') {
+      return
+    }
+    if (props.value !== value) {
       setValue(props.value)
     }
   }, [props.value])
 
-  // Auto save
+  // Rollback the value when onInput rejects.
+  const oldValue = useRef<string>(value)
   useEffect(() => {
-    saveTimer.current = setTimeout(() => {
-      props.onSave?.call(undefined, value)
-    }, props.autoSaveTimeout || defaultAutoSaveTimeout) as never
-
-    return () => {
-      if (saveTimer.current) {
-        clearTimeout(saveTimer.current)
-      }
+    if (value === oldValue.current) {
+      return
     }
-  }, [saveTimer, value])
+
+    const filterResult = props.inputFilter?.call(undefined, value)
+    if (filterResult === false) {
+      setValue(oldValue.current)
+      return
+    }
+
+    oldValue.current = value
+    props.onChange?.call(undefined, value)
+  }, [value])
+
+  const textInput = useRef<HTMLInputElement>(null)
 
   const handleClick = (e: MouseEvent<unknown>) => {
     e.preventDefault()
@@ -78,11 +86,11 @@ const PinInput = (props: PinInputProps): ReactElement => {
           return ''.padEnd(props.cols, '\t')
         }
 
-        if (len > props.cols * (props.rows - 1)) {
+        if (len >= props.cols * (props.rows - 1)) {
           return prev
         }
 
-        const i = Math.ceil(len / props.cols) * props.cols - len
+        const i = Math.ceil(len / props.cols) * props.cols
         return prev.padEnd(i, '\t')
       })
       break
@@ -99,11 +107,7 @@ const PinInput = (props: PinInputProps): ReactElement => {
     e.currentTarget.selectionStart = e.currentTarget.selectionEnd = value.length
   }
 
-  const handleInput = (e: FormEvent<HTMLInputElement>) => {
-    if (props.onInput?.call(undefined, e.currentTarget.value) === false) {
-      return
-    }
-
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(
       e.currentTarget.value.substr(0, props.cols * props.rows)
     )
@@ -140,7 +144,7 @@ const PinInput = (props: PinInputProps): ReactElement => {
         type="text"
         className={styles.input}
         ref={textInput}
-        onInput={handleInput}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         onSelect={handleSelect}
         value={value}
