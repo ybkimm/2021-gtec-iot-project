@@ -1,19 +1,23 @@
 import re
 from dataclasses import dataclass
 from os import path
+from time import sleep
 from typing import List
 
 import vlc
 
 regex = r'^[ \t\n\r]*((?:[^,\n\\]|\\.)+),((?:[^,\n\\]|\\.)+),((?:[^,' \
-        r'\n\\]|\\.)+),([0-9]+):([0-5][0-9])[ \t]*(?:\n|$)'
+        r'\n\\]|\\.)+),((?:[^,\n\\]|\\.)+),((?:[^,\n\\]|\\.)+),([0-9]+):([' \
+        r'0-5][0-9])(?:\n|$)'
 
 
 @dataclass
 class MusicInfo:
     title: str
     artist: str
+    album: str
     file: str
+    cover: str
     duration: int
 
 
@@ -23,6 +27,7 @@ class MusicPlayer:
     event_manager: vlc.EventManager
     playlist: List[MusicInfo]
     play_index: int
+    is_playing: bool
 
     def __init__(self, wd):
         self.wd = wd
@@ -33,6 +38,7 @@ class MusicPlayer:
         self.parse_playlist(wd)
 
     def reset(self):
+        # FIXME: 플레이 끝나고 나서 플레이어 Freeze 되는 문제 해결되면 고칠 것
         vlc_instance = vlc.MediaPlayer()
         self.vlc_instance = vlc_instance
         self.event_manager = vlc_instance.event_manager()
@@ -59,8 +65,10 @@ class MusicPlayer:
             playlist.append(MusicInfo(
                 title=caps.group(1),
                 artist=caps.group(2),
-                file=caps.group(3),
-                duration=int(caps.group(4)) * 60000 + int(caps.group(5)) * 1000
+                album=caps.group(3),
+                file=caps.group(4),
+                cover=caps.group(5),
+                duration=int(caps.group(6)) * 60000 + int(caps.group(7)) * 1000
             ))
 
         self.playlist = playlist
@@ -69,8 +77,10 @@ class MusicPlayer:
     def get_playlist(self):
         return self.playlist
 
-    def get_music_info(self):
-        return self.playlist[self.play_index]
+    def get_music_info(self, index: int):
+        if index < 0:
+            return self.playlist[self.play_index]
+        return self.playlist[index]
 
     def is_playing(self):
         return self.vlc_instance.is_playing()
@@ -81,39 +91,30 @@ class MusicPlayer:
     def seek_to(self, t: int):
         self.vlc_instance.set_time(t)
 
-    def play(self):
+    def play(self, index: int):
         self.stop()
+        if index >= 0:
+            self.play_index = index
         self.set_media(self.playlist[self.play_index])
         self.vlc_instance.play()
-
-    def next(self):
-        self.adjust_play_index(1)
-        self.stop()
-        self.set_media(self.playlist[self.play_index])
-        self.vlc_instance.play()
-
-    def prev(self):
-        self.adjust_play_index(-1)
-        self.stop()
-        self.set_media(self.playlist[self.play_index])
-        self.vlc_instance.play()
+        sleep(0.1)
 
     def stop(self):
         if self.vlc_instance.is_playing():
             self.vlc_instance.stop()
+            sleep(0.1)
 
     def set_media(self, item: MusicInfo):
         media = vlc.Media(item.file)
         self.vlc_instance.set_media(media)
         self.vlc_instance.set_time(0)
 
-    def adjust_play_index(self, n: int):
-        self.play_index += n
+    def on_play_ended(self, event):
+        self.reset()
+
+        self.play_index += 1
         if self.play_index >= len(self.playlist):
             self.play_index -= len(self.playlist)
         elif self.play_index < 0:
             self.play_index += len(self.playlist)
-
-    def on_play_ended(self, event):
-        self.reset()
-        self.next()
+        self.play(-1)

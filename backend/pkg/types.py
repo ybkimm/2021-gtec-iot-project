@@ -5,38 +5,42 @@ from pkg.music import MusicInfo
 
 
 @dataclass
-class LightStatusResponse:
+class APIResponse:
+    status: str
+    timestamp: float
+
+
+@dataclass
+class ErrorResponse(APIResponse):
+    error: str
+
+
+@dataclass
+class LightStatusResponse(APIResponse):
     is_on: bool
 
 
 @dataclass
-class AlertStatusResponse:
+class AlertStatusResponse(APIResponse):
     is_on: bool
 
 
 @dataclass
-class FanStatusResponse:
+class FanStatusResponse(APIResponse):
     is_on: bool
 
 
 @dataclass
-class JukeboxCurrentMusicResponse(MusicInfo):
+class JukeboxCurrentMusicResponse(APIResponse, MusicInfo):
+    index: int
     is_playing: bool
-    current_time: int
 
 
 @dataclass
-class JukeboxStatusResponse:
+class JukeboxStatusResponse(APIResponse):
     playlist: List[MusicInfo]
 
 
 @dataclass
-class NotepadContentResponse:
-    status: str
+class NotepadContentResponse(APIResponse):
     content: str
-
-
-@dataclass
-class APIResponse:
-    status: str
-    error: str = None
