@@ -9,8 +9,9 @@
   "onpu": 57351,
   "play": 57352,
   "pause": 57353,
-  "stop": 57356,
   "musicNext": 57354,
-  "musicPrev": 57355
+  "musicPrev": 57355,
+  "stop": 57356,
+  "lightbulb": 57357
 }
 
