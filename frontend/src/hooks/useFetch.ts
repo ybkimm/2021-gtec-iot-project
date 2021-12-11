@@ -1,7 +1,6 @@
 /* global RequestInit */
 
-import { DependencyList, useMemo, useRef, useState } from 'react'
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import { DependencyList, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface FetchParams<T> extends Omit<RequestInit, 'signal' | 'mode'> {
   handleResponse?: (resp: Response) => T | Promise<T>
@@ -9,7 +8,7 @@ export interface FetchParams<T> extends Omit<RequestInit, 'signal' | 'mode'> {
 }
 
 const useFetch = <T>(
-  req: string,
+  reqFactory: string | ((isFirst: boolean) => string),
   paramsFactory: FetchParams<T> | ((isFirst: boolean) => FetchParams<T>),
   deps?: DependencyList):
   [T | null, boolean, unknown] => {
@@ -18,6 +17,13 @@ const useFetch = <T>(
   const [error, setError] = useState<any>(null)
   const isFirstTime = useRef<boolean>(true)
 
+  const req = useMemo(() => {
+    const req = typeof reqFactory === 'function'
+      ? reqFactory(isFirstTime.current)
+      : reqFactory
+    return req
+  }, [reqFactory, isFirstTime.current])
+
   const params = useMemo(() => {
     const params = typeof paramsFactory === 'function'
       ? paramsFactory(isFirstTime.current)
@@ -25,7 +31,7 @@ const useFetch = <T>(
     return params
   }, [paramsFactory, isFirstTime.current])
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     if (isFirstTime.current && params.doInitialRequest === false) {
       isFirstTime.current = false
       return
@@ -66,7 +72,7 @@ const useFetch = <T>(
       })
 
     return () => controller.abort()
-  }, [req, params, ...(deps || [])])
+  }, deps)
 
   return [
     response,
