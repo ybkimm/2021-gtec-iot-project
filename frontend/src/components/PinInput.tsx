@@ -29,7 +29,6 @@ const PinInput = (props: PinInputProps): ReactElement => {
 
   const [value, setValue] = useState<string>('')
   useEffect(() => {
-    console.log('value update', props.value)
     if (props.value != null) {
       setValue(props.value)
     }
@@ -101,7 +100,6 @@ const PinInput = (props: PinInputProps): ReactElement => {
   }
 
   const handleInput = (e: FormEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value)
     if (props.onInput?.call(undefined, e.currentTarget.value) === false) {
       return
     }

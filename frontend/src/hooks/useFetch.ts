@@ -39,7 +39,6 @@ const useFetch = <T>(
 
     setLoading(true)
 
-    console.log('fetch', req, params)
     const controller = new AbortController()
     fetch(req, {
       ...params,
