@@ -3,28 +3,27 @@ import { classNames } from '../internal/utils/className'
 import styles from './ToggleButton.module.css'
 
 export interface ToggleButtonProps {
-  onChange?: (active: boolean) => void
+  onChange?: (active: boolean) => boolean | undefined
   value?: boolean
 }
 
 const ToggleButton = (props: ToggleButtonProps): ReactElement => {
-  const [isActive, setActive] = useState<boolean>(false)
+  const [value, setValue] = useState<boolean>(false)
 
-  const isFirstTime = useRef<boolean>(false)
-  useEffect(() => {
-    if (!isFirstTime.current) {
-      isFirstTime.current = true
-      return
+  const handleClick = () => {
+    const isActive = typeof props.value === 'boolean' ? props.value : value
+    const result = props.onChange?.call(undefined, !isActive)
+    if (result !== false) {
+      setValue(!isActive)
     }
-    props.onChange?.call(undefined, isActive)
-  }, [isActive])
+  }
 
   return (
     <div
-      onClick={() => setActive(!isActive)}
+      onClick={handleClick}
       className={classNames(
         styles.toggleButton,
-        (typeof props.value === 'boolean' ? props.value : isActive)
+        (typeof props.value === 'boolean' ? props.value : value)
           && styles.isActive
       )}
     >
