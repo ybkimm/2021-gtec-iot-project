@@ -49,6 +49,7 @@ storybook-build: ## Builds the storybook
 build: ${FONT_DST} ## Build dist
 	rm -rf ${DST_DIR}
 	${ROLLUP} -c
+	cp src/index.prod.html ${DST_DIR}/index.html
 
 # Assets
 
