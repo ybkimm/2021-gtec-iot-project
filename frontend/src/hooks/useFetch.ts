@@ -12,9 +12,8 @@ const useFetch = <T>(
   paramsFactory: FetchParams<T> | ((isFirst: boolean) => FetchParams<T>),
   deps?: DependencyList):
   [T | null, boolean, unknown] => {
-  const [response, setResponse] = useState<T | null>(null)
-  const [isLoading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<any>(null)
+  const [[response, isLoading, error], setState]
+    = useState<[T | null, boolean, unknown]>([null, false, null])
   const isFirstTime = useRef<boolean>(true)
 
   const req = useMemo(() => {
@@ -37,7 +36,7 @@ const useFetch = <T>(
       return
     }
 
-    setLoading(true)
+    setState([null, true, null])
 
     const controller = new AbortController()
     fetch(req, {
@@ -46,25 +45,19 @@ const useFetch = <T>(
       signal: controller.signal
     })
       .then((resp) => {
-        setLoading(false)
         if (params.handleResponse != null) {
           return params.handleResponse(resp)
         }
         return resp.json() as Promise<T>
-      }, (err) => {
-        if (!controller.signal.aborted) {
-          setError(err)
-          setResponse(null)
-          setLoading(false)
-        }
-        return null
       })
       .then((v) => {
         if (controller.signal.aborted) {
-          return null
+          throw new Error('aborted')
         }
-        setResponse(v)
-        setError(null)
+        setState([v, false, null])
+      })
+      .catch((err) => {
+        setState([null, false, err])
       })
       .finally(() => {
         isFirstTime.current = false
