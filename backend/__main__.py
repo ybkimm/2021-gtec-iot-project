@@ -1,5 +1,6 @@
 from datetime import datetime
 from os import getcwd, path
+from time import sleep
 from typing import List
 
 from flask import Flask, send_file, jsonify, request
@@ -265,4 +266,7 @@ def put_device_notepad():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(
+        port=7281,
+        debug=False
+    )
