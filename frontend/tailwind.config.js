@@ -1,5 +1,8 @@
 /* eslint-disable quote-props */
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   mode: 'jit',
   content: ['./src/**/*.tsx'],
@@ -33,6 +36,9 @@ module.exports = {
     }
   },
   plugins: [
-    require('@tailwindcss/aspect-ratio')
+    require('@tailwindcss/aspect-ratio'),
+    plugin(({ addVariant }) => {
+      addVariant('isActive', '&.isActive')
+    })
   ]
 }
