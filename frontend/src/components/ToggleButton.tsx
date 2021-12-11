@@ -1,9 +1,9 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { classNames } from '../internal/utils/className'
 import styles from './ToggleButton.module.css'
 
 export interface ToggleButtonProps {
-  onChange?: (active: boolean) => boolean | undefined
+  onChange?: (active: boolean) => boolean | undefined | void
   value?: boolean
 }
 
