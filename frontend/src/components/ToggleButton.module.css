@@ -1,0 +1,8 @@
+.toggle-button {
+  @apply relative w-14 h-7 bg-black bg-opacity-10 rounded-full cursor-pointer
+    before:block before:absolute
+      before:w-5 before:h-5 before:left-1 before:top-1
+      before:bg-black before:bg-opacity-50 before:transition-all
+      before:rounded-full
+    isActive:before:left-8 isActive:before:bg-blue
+}
