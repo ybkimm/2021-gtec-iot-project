@@ -58,7 +58,10 @@ const config = [{
         })
       ],
       extract: true,
-      modules: false
+      modules: {
+        generateScopedName: '[hash:base64:5]',
+        localsConvention: 'camelCaseOnly'
+      }
     }),
     babel({
       extensions,

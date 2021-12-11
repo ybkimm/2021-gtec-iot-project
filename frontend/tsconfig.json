@@ -3,7 +3,13 @@
   "include": ["src/**/*", ".storybook/PreviewWrapper.tsx"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*", "dist/*"],
   "compilerOptions": {
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "plugins": [{
+      "name": "typescript-plugin-css-modules",
+      "options": {
+        "classnameTransform": "camelCaseOnly",
+        "customTemplate": "./cssModuleTemplate.js"
+      }
+    }],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",
