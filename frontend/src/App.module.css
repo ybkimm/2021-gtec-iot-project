@@ -1,5 +1,6 @@
 .header {
-  @apply border-b border-opacity-20 border-black px-4 mb-10 bg-white;
+  @apply px-4 mb-2 border-b border-black border-opacity-20 bg-white
+    md:mb-10;
 
   .headerInner {
     @apply flex w-full h-16;
@@ -11,7 +12,8 @@
 }
 
 .contents {
-  @apply flex;
+  @apply flex flex-col
+    md:flex-row
 }
 
 .sidebar {

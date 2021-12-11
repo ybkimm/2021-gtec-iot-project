@@ -1,7 +1,7 @@
 .sidebar {
-  @apply px-4;
+  @apply px-2 md:px-4;
 
   .stickySidebar {
-    @apply sticky top-4;
+    @apply md:sticky md:top-4;
   }
 }

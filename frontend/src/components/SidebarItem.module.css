@@ -1,6 +1,7 @@
 .sidebarItem {
-  @apply w-48 p-3 px-6 bg-transparent text-black rounded mb-2
-    transition-colors cursor-pointer select-none;
+  @apply w-full p-3 px-6 text-center bg-transparent text-black rounded mb-2
+    transition-colors cursor-pointer select-none
+    md:w-48 md:text-left;
 
   &:hover {
     @apply bg-gray-200;
