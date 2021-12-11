@@ -17,12 +17,12 @@ class ErrorResponse(APIResponse):
 
 @dataclass
 class LightStatusResponse(APIResponse):
-    is_on: bool
+    lights: List[bool]
 
 
 @dataclass
 class AlertStatusResponse(APIResponse):
-    is_on: bool
+    active: bool
 
 
 @dataclass

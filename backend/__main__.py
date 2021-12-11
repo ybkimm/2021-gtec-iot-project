@@ -1,4 +1,6 @@
+from datetime import datetime
 from os import getcwd, path
+from typing import List
 
 from flask import Flask, send_file, jsonify, request
 from flask_cors import CORS
@@ -7,14 +9,14 @@ from pkg.music import MusicPlayer
 from pkg.notepad import Notepad
 from pkg.types import LightStatusResponse, AlertStatusResponse, \
     FanStatusResponse, JukeboxStatusResponse, JukeboxCurrentMusicResponse, \
-    NotepadContentResponse, APIResponse
+    NotepadContentResponse, APIResponse, ErrorResponse
 
 
 class Device:
     wd: str
     music_player: MusicPlayer
     notepad: Notepad
-    light_status: bool
+    light_status: List[bool]
     alert_status: bool
     fan_status: bool
 
@@ -22,12 +24,18 @@ class Device:
         self.wd = getcwd()
         self.music_player = MusicPlayer(self.wd)
         self.notepad = Notepad(self.wd)
+        self.light_status = [False, False]
+        self.alert_status = False
 
 
 device = Device()
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
+
+
+def now():
+    return datetime.now().timestamp()
 
 
 @app.get('/')
@@ -61,12 +69,16 @@ def get_device_icon():
 
 @app.get('/device/alert')
 def get_device_alert():
-    return jsonify(AlertStatusResponse(device.alert_status))
+    return jsonify(AlertStatusResponse(
+        status='ok',
+        active=device.alert_status,
+        timestamp=now()
+    ))
 
 
 @app.post('/device/alert')
 def post_device_alert():
-    action = request.form.get('action')
+    action = request.args.get('action')
     if action == 'toggle':
         device.alert_status = not device.alert_status
     elif action == 'on':
@@ -74,32 +86,77 @@ def post_device_alert():
     elif action == 'off':
         device.alert_status = False
     else:
-        return 'invalid request', 400
-    return get_device_alert()
+        return ErrorResponse(
+            status='bad request',
+            error='unknown action',
+            timestamp=now()
+        ), 400
+
+    return jsonify(APIResponse(
+        status='ok',
+        timestamp=now()
+    ))
 
 
 @app.get('/device/light')
 def get_device_light():
-    return jsonify(LightStatusResponse(device.light_status))
+    return jsonify(LightStatusResponse(
+        status='ok',
+        lights=device.light_status,
+        timestamp=now()
+    ))
+
+
+@app.get('/device/light/info')
+def get_device_light_info():
+    return send_file(
+        path.join(device.wd, 'lightroom.json'),
+        mimetype='application/json;charset=utf-8'
+    )
+
+
+@app.get('/device/light/background')
+def get_device_light_background():
+    return send_file(path.join(device.wd, 'lightroom.png'))
 
 
 @app.post('/device/light')
 def post_device_light():
-    action = request.form.get('action')
+    index = int(request.args.get('index'))
+    if index >= len(device.light_status):
+        return ErrorResponse(
+            status='bad request',
+            error='unknown light id',
+            timestamp=now()
+        ), 400
+
+    action = request.args.get('action')
     if action == 'toggle':
-        device.light_status = not device.light_status
+        device.light_status[index] = not device.light_status[index]
     elif action == 'on':
-        device.light_status = True
+        device.light_status[index] = True
     elif action == 'off':
-        device.light_status = False
+        device.light_status[index] = False
     else:
-        return 'invalid request', 400
-    return get_device_light()
+        return ErrorResponse(
+            status='bad request',
+            error='unknown action',
+            timestamp=now()
+        ), 400
+
+    return jsonify(APIResponse(
+        status='ok',
+        timestamp=now()
+    ))
 
 
 @app.get('/device/fan')
 def get_device_fan():
-    return jsonify(FanStatusResponse(device.fan_status))
+    return jsonify(FanStatusResponse(
+        status='ok',
+        is_on=device.fan_status,
+        timestamp=now()
+    ))
 
 
 @app.post('/device/fan')
@@ -113,83 +170,65 @@ def post_device_fan():
         device.fan_status = False
     else:
         return 'invalid request', 400
-    return get_device_fan()
+    return jsonify(APIResponse(
+        status='ok',
+        timestamp=now()
+    ))
 
 
 @app.get('/device/jukebox')
 def get_device_jukebox():
     return jsonify(JukeboxStatusResponse(
-        playlist=device.music_player.get_playlist()
+        status='ok',
+        playlist=device.music_player.get_playlist(),
+        timestamp=now()
     ))
 
 
 @app.get('/device/jukebox/current_music')
 def get_device_jukebox_current_music():
-    current_music = device.music_player.get_music_info()
+    current_music = device.music_player.get_music_info(-1)
     return jsonify(JukeboxCurrentMusicResponse(
+        status='ok',
         title=current_music.title,
         artist=current_music.artist,
+        album=current_music.album,
         file=current_music.file,
+        cover=current_music.cover,
         duration=current_music.duration,
         is_playing=device.music_player.is_playing(),
-        current_time=device.music_player.get_time()
+        index=device.music_player.play_index,
+        timestamp=now()
     ))
+
+
+@app.get('/device/jukebox/cover')
+def get_device_jukebox_cover():
+    index = int(request.args.get('index'))
+    music = device.music_player.get_music_info(index)
+    print(music.cover)
+    return send_file(path.join(device.wd, music.cover))
 
 
 @app.post('/device/jukebox/play')
 def post_device_jukebox_play():
-    device.music_player.play()
-    return app.response_class(
-        response='{"status":"ok"}',
-        status=200,
-        mimetype='application/json'
+    index = int(request.args.get('index'))
+    device.music_player.play(
+        index=index
     )
+    return jsonify(APIResponse(
+        status='ok',
+        timestamp=datetime.now().timestamp()
+    ))
 
 
 @app.post('/device/jukebox/stop')
 def post_device_jukebox_stop():
     device.music_player.stop()
-    return app.response_class(
-        response='{"status":"ok"}',
-        status=200,
-        mimetype='application/json'
-    )
-
-
-@app.post('/device/jukebox/next')
-def post_device_jukebox_next():
-    device.music_player.next()
-    return app.response_class(
-        response='{"status":"ok"}',
-        status=200,
-        mimetype='application/json'
-    )
-
-
-@app.post('/device/jukebox/seek_to')
-def post_device_music_seek_to():
-    t: int
-    try:
-        t = int(request.form.get('t'))
-    except ValueError as e:
-        return 't must be int', 400
-
-    device.music_player.seek_to(t)
-    return app.response_class(
-        response='{"status":"ok"}',
-        status=200,
-        mimetype='application/json'
-    )
-
-
-@app.post('/device/jukebox/prev')
-def post_device_music_prev():
-    device.music_player.prev()
-    return app.response_class(
-        response='{"status":"ok"}',
-        status=200,
-        mimetype='application/json'
-    )
+    return jsonify(APIResponse(
+        status='ok',
+        timestamp=datetime.now().timestamp()
+    ))
 
 
 @app.get('/device/notepad')
@@ -197,7 +236,8 @@ def get_device_notepad():
     content = str(device.notepad.get_content(), 'utf-8')
     return jsonify(NotepadContentResponse(
         status='ok',
-        content=content
+        content=content,
+        timestamp=now()
     ))
 
 
@@ -205,13 +245,16 @@ def get_device_notepad():
 def put_device_notepad():
     content = request.get_data()
     if len(content) < 33:
-        return jsonify(APIResponse(
+        return jsonify(ErrorResponse(
             status='error',
-            error='short content'
+            error='short content',
+            timestamp=now()
         )), 400
     device.notepad.update(content)
-    return jsonify(APIResponse(
-        status='ok'
+    return jsonify(NotepadContentResponse(
+        status='ok',
+        content=str(device.notepad.get_content(), 'utf-8'),
+        timestamp=now()
     ))
 
 
