@@ -33,6 +33,6 @@
   }
 
   .input {
-    /*@apply pointer-events-none opacity-0 absolute bottom-0 left-0 w-0 h-0;*/
+    @apply pointer-events-none opacity-0 absolute bottom-0 left-0 w-0 h-0;
   }
 }
