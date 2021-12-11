@@ -1,0 +1,21 @@
+.light-map {
+  @apply relative;
+
+  .light-point {
+    @apply absolute z-10 w-4 h-4 bg-black bg-opacity-20 rounded-full
+      -translate-x-2 -translate-y-2
+      isActive:bg-blue isActive:bg-opacity-100;
+
+    /* FIXME: transform 제대로 적용 안되는 버그가 있어서 하드코딩. */
+    /*noinspection CssUnresolvedCustomProperty*/
+    transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0);
+  }
+}
+
+.light-controls {
+  .light-item {
+    @apply flex px-8 py-2 items-center justify-between
+      odd:bg-black odd:bg-opacity-5
+      hover:bg-black hover:bg-opacity-10
+  }
+}
