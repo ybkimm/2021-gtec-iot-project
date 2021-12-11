@@ -12,5 +12,10 @@
   "jukebox": {
     "leading": "쥬크박스",
     "current-playing": "지금 재생중"
+  },
+  "light": {
+    "leading": "조명",
+    "turn-on": "전원 켜기",
+    "turn-off": "전원 끄기"
   }
 }

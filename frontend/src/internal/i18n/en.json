@@ -12,5 +12,10 @@
   "jukebox": {
     "leading": "Jukebox",
     "current-playing": "Current playing"
+  },
+  "light": {
+    "leading": "Lights",
+    "turn-on": "Turn on",
+    "turn-off": "Turn off"
   }
 }
