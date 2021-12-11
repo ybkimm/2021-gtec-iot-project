@@ -15,10 +15,6 @@ const buildNotepadBody = (s: string): string => {
   return body
 }
 
-const parseNotepadBody = (s: string): string => {
-  return s.substr(0, 16).trimEnd() + s.substr(17, 16).trimEnd()
-}
-
 interface NotepadResponse {
   status: boolean
   content: string
@@ -46,7 +42,7 @@ const Notepad = () => {
     if (response == null) {
       return
     }
-    setContent(parseNotepadBody(response.content))
+    setContent(response.content.trimEnd())
   }, [response?.timestamp])
 
   // Saving
